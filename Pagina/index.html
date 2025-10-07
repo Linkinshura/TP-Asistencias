@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagina de faltas</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+  <h1>Filtrar cursos y materias</h1>
+  
+  <div class="filters">
+    <div class="filter">
+      <label for="cursos">Cursos</label>
+      <select id="cursos" name="cursos">
+        <option value="4to 3ra">4to 3ra</option>
+        <option value="4to 4ta">4to 4ta</option>
+        <option value="4to 5ta">4to 5ta</option>
+        <option value="4to 1ra">4to 1ra</option>
+        <option value="5to 2da">5to 2da</option>
+      </select>
+    </div>
+
+
+       <div class="filter">
+      <label for="materias">Materias</label>
+      <select id="materias" name="materias">
+        <option value="Proyecto Informatico">Proyecto Informatico I</option>
+        <option value="Base de datos">Base de Datos</option>
+        <option value="Algoritmos">Laboratorio de Algoritmos y Estructura de datos</option>
+        <option value="Organizacion">Organizacion de las computadoras</option>
+        <option value="POO">Programacion Orientada a Objetos</option>
+        <option value="Redes">Redes</option>
+        <option value="Proyecto Informatico II">Proyecto Informatico II</option>
+      </select>
+    </div>
+   
+    <button id="applyFilters">Aplicar Filtros</button>
+  </div>
+
+  <div class="results">
+    <!-- Aquí irán los resultados filtrados -->
+    <p>No hay resultados aún.</p>
+  </div>
+</div>
+
+
+
+    
+</body>
+<script src="main.js"></script>
+</html>
