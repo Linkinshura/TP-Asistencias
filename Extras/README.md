@@ -20,3 +20,22 @@ Verde=Presente
 Rojo=Ausente
 Naranja=Retiro Anticipado
 Amarrilo=LLegada tarde
+
+
+## Pasos:
+
+### HTML Y CSS:
+
+Hacer el formato y diseño de la pagina primero 
+
+### Crear Base De Datos:
+
+Crear la base de datos
+
+### Funciones basicas JS:
+
+Hacer las funciones faciles de JS
+
+### Lo demas de JS:
+
+Terminar con el resto de JS
