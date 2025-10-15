@@ -22,7 +22,7 @@ function cargarCursos() {
     fetch('http://localhost:3000/api/cursos')
         .then(res => res.json())
         .then(data => {
-            const select = document.querySelector('#Cursos');
+            const select = document.querySelector('#cursos');
             select.innerHTML = '';
             for (let curso of data) {
                 const option = document.createElement('option');
@@ -40,7 +40,7 @@ function cargarMaterias(e) {
     fetch(`http://localhost:3000/api/materias/${cursoId}`)
         .then(res => res.json())
         .then(data => {
-            const select = document.querySelector('#Materias');
+            const select = document.querySelector('#materias');
             select.innerHTML = '';
             for (let materia of data) {
                 const option = document.createElement('option');
@@ -72,4 +72,3 @@ function crearBotones() {
 
 cargarCursos();
 
-document.querySelector('#materias').addEventListener('change', crearBotones);
