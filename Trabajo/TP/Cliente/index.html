@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Asistencia Escolar</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Asistencia Escolar</h1>
+
+  <label for="cursos">Curso:</label>
+  <select name="curso" id="cursos" onchange="cargarMaterias(event)">
+    <option value="">Seleccione un curso</option>
+  </select>
+
+  <label for="materias">Materia:</label>
+  <select name="materia" id="materias" onchange="crearBotones()">
+    <option value="">Seleccione una materia</option>
+  </select>
+
+  <label for="alumnos">Alumno:</label>
+  <select name="alumno" id="alumnos">
+    <option value="">Seleccione un alumno</option>
+  </select>
+
+  <div id="botones"></div>
+
+  <script src="main.js"></script>
+</body>
+</html>
