@@ -1,0 +1,89 @@
+/* ==== Estilo General ==== */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+}
+
+/* ==== Contenedores de Selects ==== */
+label {
+  font-weight: bold;
+  margin-right: 8px;
+  display: block;
+  margin-top: 20px;
+}
+
+select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  margin-top: 5px;
+  width: 100%;
+  max-width: 400px;
+  box-sizing: border-box;
+}
+
+#cursos, #materias {
+  margin-bottom: 15px;
+}
+
+/* ==== Lista de alumnos ==== */
+#lista-alumnos {
+  margin-top: 30px;
+}
+
+.fila-alumno {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.nombre-alumno {
+  font-weight: 500;
+  font-size: 16px;
+  flex: 1;
+}
+
+/* ==== Botones de asistencia ==== */
+.botones-asistencia {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.btn-asistencia {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.btn-asistencia:hover {
+  transform: scale(1.05);
+}
+
+
+  
+  .btn-asistencia:nth-child(1) { background-color: #d9534f; } /* Ausente */
+  .btn-asistencia:nth-child(2) { background-color: #f0ad4e; } /* Tarde */
+  .btn-asistencia:nth-child(3) { background-color: #5bc0de; } /* Retiro Anticipado */
+  .btn-asistencia:nth-child(4) { background-color: #5cb85c; } /* Presente */
+  .btn-asistencia:nth-child(5) { background-color: #f0ac4e8f; } /* Presente con Ausencia*/
