@@ -82,8 +82,7 @@ select {
 
 
   
-  .btn-asistencia:nth-child(1) { background-color: #d9534f; } /* Ausente */
-  .btn-asistencia:nth-child(2) { background-color: #f0ad4e; } /* Tarde */
-  .btn-asistencia:nth-child(3) { background-color: #5bc0de; } /* Retiro Anticipado */
-  .btn-asistencia:nth-child(4) { background-color: #5cb85c; } /* Presente */
-  .btn-asistencia:nth-child(5) { background-color: #f0ac4e8f; } /* Presente con Ausencia*/
+  .btn-asistencia:nth-child(2) { background-color: #da716e; } /* Retiro */
+  .btn-asistencia:nth-child(3) { background-color: #f0ad4e; } /* Ausente */
+  .btn-asistencia:nth-child(4) { background-color: #cfdb1c; } /* Tarde */
+  .btn-asistencia:nth-child(1) { background-color: #69bd69; } /* Presente */
