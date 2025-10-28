@@ -1,3 +1,23 @@
+function HandleSubmit(event){
+ const nombre = document.querySelector('#nombre').value
+ const apellido = document.querySelector('#apellido').value
+ const curso = document.querySelector('#AlumCurso').value
+ 
+ const datos = { nombre, apellido, curso };
+ const options = {
+    method: 'POST',
+    body: JSON.stringify(datos),
+    headers: { 'Content-Type': 'application/json' }
+};
+
+fetch('http://localhost:3000/api/alumnos', options)
+    .then(res => res.json())
+    .then(data => alert(JSON.stringify(data, null, 2)))
+    .catch(err => alert('Error: ' + err.message));
+}
+
+
+
 function HandleClick(event) {
     const tipo = event.target.textContent;
     const alumno = document.querySelector('#alumnos').value;
@@ -138,3 +158,4 @@ function enviarAsistencia(tipo, alumnoId, materiaId) {
 
 // Cargar cursos al iniciar
 cargarCursos();
+
