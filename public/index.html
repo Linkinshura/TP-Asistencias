@@ -9,6 +9,15 @@
 <body>
   <h1>Asistencia Escolar</h1>
 
+  <form id="Alumnos">
+    
+    <input type="text"  id="nombre" placeholder="nombre">
+    <input type="text"  id="apellido" placeholder="apellido">
+    <input type="text"  id="AlumCurso" placeholder="curso">
+    <input type="submit" placeholder="Nuevo Alumno" onsubmit="HandleSubmit(event)">
+
+  </form>
+
   <label for="cursos">Curso:</label>
   <select name="curso" id="cursos" onchange="cargarMaterias(event)">
   </select>
