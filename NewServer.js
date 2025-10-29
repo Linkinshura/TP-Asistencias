@@ -89,7 +89,7 @@ app.post('/api/alumnos', (req, res) => {
 
 
 app.get('/api/asistencias', (req, res) => {
-  // Si no se pasa una fecha por query, se usa la actual para evitar malentendidos
+  // Se usa una fecha o la actual 
   const { fecha } = req.query;
   const fechaFiltro = fecha || new Date().toISOString().slice(0, 10); // formato YYYY-MM-DD
 
