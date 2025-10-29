@@ -21,7 +21,7 @@ const connection = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '', // agregá si tu BD lo requiere
-  database: 'school'
+  database: 'tp'
 });
 
 connection.connect(err => {
