@@ -29,7 +29,7 @@ connection.connect(err => {
     console.error('Error al conectar con MySQL:', err.message);
     return;
   }
-  console.log('Nos conectamos a la Base de datos Molina');
+  console.log('Nos conectamos a la Base de datos de Molina');
 });
 
 
