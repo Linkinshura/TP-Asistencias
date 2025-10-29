@@ -1,44 +1,98 @@
-/* ==== Estilo General ==== */
+/* ==== Estilos Generales ==== */
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background-color: #f5f7fa;
-  color: #333;
+  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #e3ebf2 0%, #f8fafc 100%);
+  color: #2c3e50;
   margin: 0;
   padding: 20px;
+  min-height: 100vh;
 }
 
 h1 {
   text-align: center;
-  color: #2c3e50;
+  color: #1c2b36;
+  font-size: 2.2em;
   margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
-/* ==== Contenedores de Selects ==== */
-label {
+/* ==== Formularios ==== */
+form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  background-color: #ffffff;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  max-width: 600px;
+  margin: 0 auto 30px auto;
+}
+
+form input[type="text"] {
+  flex: 1 1 180px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 15px;
+  transition: all 0.2s ease;
+}
+
+form input[type="text"]:focus {
+  border-color: #4a90e2;
+  outline: none;
+  box-shadow: 0 0 5px rgba(74, 144, 226, 0.3);
+}
+
+form input[type="submit"] {
+  background-color: #4a90e2;
+  color: white;
   font-weight: bold;
-  margin-right: 8px;
-  display: block;
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+form input[type="submit"]:hover {
+  background-color: #357ab8;
+  transform: translateY(-1px);
+}
+
+/* ==== Selects ==== */
+label {
+  font-weight: 600;
   margin-top: 20px;
+  display: block;
+  text-align: center;
 }
 
 select {
-  padding: 8px 12px;
+  padding: 10px 12px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 8px;
   background-color: #fff;
-  margin-top: 5px;
   width: 100%;
   max-width: 400px;
-  box-sizing: border-box;
+  margin: 10px auto;
+  display: block;
+  font-size: 15px;
+  transition: border-color 0.2s ease;
 }
 
-#cursos, #materias {
-  margin-bottom: 15px;
+select:focus {
+  border-color: #4a90e2;
 }
 
-/* ==== Lista de alumnos ==== */
+/* ==== Lista de Alumnos ==== */
 #lista-alumnos {
-  margin-top: 30px;
+  margin-top: 40px;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .fila-alumno {
@@ -46,43 +100,73 @@ select {
   align-items: center;
   justify-content: space-between;
   background-color: #ffffff;
-  border: 1px solid #ddd;
-  padding: 10px 15px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  border: 1px solid #e0e0e0;
+  padding: 14px 18px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fila-alumno:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
 
 .nombre-alumno {
-  font-weight: 500;
+  font-weight: 600;
   font-size: 16px;
+  color: #2c3e50;
   flex: 1;
 }
 
 /* ==== Botones de asistencia ==== */
 .botones-asistencia {
   display: flex;
-  gap: 8px;
+  gap: 10px;
   flex-wrap: wrap;
 }
 
 .btn-asistencia {
-  padding: 6px 12px;
+  padding: 8px 14px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  font-weight: 600;
+  color: #fff;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 110px;
 }
 
 .btn-asistencia:hover {
-  transform: scale(1.05);
+  transform: translateY(-1px);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
 }
 
+/* ==== Colores específicos ==== */
+.btn-asistencia:nth-child(1) { background-color: #4CAF50; } /* Presente */
+.btn-asistencia:nth-child(2) { background-color: #e74c3c; } /* Ausente */
+.btn-asistencia:nth-child(3) { background-color: #f39c12; } /* Tarde */
+.btn-asistencia:nth-child(4) { background-color: #9b59b6; } /* Retiro Anticipado */
 
-  
-  .btn-asistencia:nth-child(2) { background-color: #da716e; } /* Retiro */
-  .btn-asistencia:nth-child(3) { background-color: #f0ad4e; } /* Ausente */
-  .btn-asistencia:nth-child(4) { background-color: #cfdb1c; } /* Tarde */
-  .btn-asistencia:nth-child(1) { background-color: #69bd69; } /* Presente */
+/* ==== Responsividad ==== */
+@media (max-width: 600px) {
+  form {
+    flex-direction: column;
+  }
+
+  .fila-alumno {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .botones-asistencia {
+    justify-content: flex-start;
+  }
+
+  select, form input[type="text"] {
+    max-width: 100%;
+  }
+}
