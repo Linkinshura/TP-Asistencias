@@ -17,7 +17,7 @@ npm install -g nodemon
 nodemon server.js
 
 
-C:\Users\camil\OneDrive\Desktop\Ian\Proyecto I\TP-Octubre-main\Trabajo\TP - copia>npm install express mysql2
+C:\Users\camil\OneDrive\Desktop\Ian\Proyecto I\TP-Octubre-main\Trabajo\TP - copia> npm install express mysql cors morgan
 
 up to date, audited 83 packages in 1s
 
