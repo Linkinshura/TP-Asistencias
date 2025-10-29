@@ -88,6 +88,50 @@ app.post('/api/alumnos', (req, res) => {
 });
 
 
+app.get('/api/asistencias', (req, res) => {
+  // Si no se pasa una fecha por query, se usa la actual para evitar malentendidos
+  const { fecha } = req.query;
+  const fechaFiltro = fecha || new Date().toISOString().slice(0, 10); // formato YYYY-MM-DD
+
+  const query = `
+    SELECT 
+      A.id,
+      A.tipo,
+      A.creado,
+      Al.nombre AS alumno_nombre,
+      Al.apellido AS alumno_apellido,
+      M.nombre AS materia_nombre,
+      C.anio,
+      C.division,
+      C.especialidad
+    FROM Asistencias A
+    INNER JOIN Alumnos Al ON A.alumno = Al.id
+    INNER JOIN Materias M ON A.materia = M.id
+    INNER JOIN Cursos C ON Al.curso = C.id
+    WHERE DATE(A.creado) = ?
+    ORDER BY Al.apellido, Al.nombre
+  `;
+
+  connection.query(query, [fechaFiltro], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error al obtener asistencias', detalle: err.message });
+    }
+
+    if (rows.length === 0) {
+      return res.status(404).json({ mensaje: `No hay asistencias registradas para la fecha ${fechaFiltro}` });
+    }
+
+    res.status(200).json({
+      fecha: fechaFiltro,
+      total: rows.length,
+      asistencias: rows
+    });
+  });
+});
+
+
+
+
 app.post('/api/asistencias', (req, res) => {
   const { tipo, alumno, materia } = req.body;
 
