@@ -1,49 +1,35 @@
-function HandleSubmit(event){
- const nombre = document.querySelector('#nombre').value
- const apellido = document.querySelector('#apellido').value
- const curso = document.querySelector('#AlumCurso').value
- 
- const datos = { nombre, apellido, curso };
- const options = {
-    method: 'POST',
-    body: JSON.stringify(datos),
-    headers: { 'Content-Type': 'application/json' }
-};
+// === FORMULARIO: AGREGAR NUEVO ALUMNO ===
+function handleSubmit(event) {
+    event.preventDefault(); // evita recargar la página
 
-fetch('http://localhost:3000/api/alumnos', options)
-    .then(res => res.json())
-    .then(data => alert(JSON.stringify(data, null, 2)))
-    .catch(err => alert('Error: ' + err.message));
-}
+    const nombre = document.querySelector('#nombre').value.trim();
+    const apellido = document.querySelector('#apellido').value.trim();
+    const curso = document.querySelector('#alumCurso').value.trim();
 
-
-
-function HandleClick(event) {
-    const tipo = event.target.textContent;
-    const alumno = document.querySelector('#alumnos').value;
-    const materia = document.querySelector('#materias').value;
-
-    if (!alumno || !materia) {
-        alert('Debe seleccionar un alumno y una materia.');
+    if (!nombre || !apellido || !curso) {
+        alert('Por favor, completá todos los campos.');
         return;
     }
 
-    const datos = { tipo, alumno, materia };
-
+    const datos = { nombre, apellido, curso };
     const options = {
         method: 'POST',
         body: JSON.stringify(datos),
         headers: { 'Content-Type': 'application/json' }
     };
 
-    const url = 'http://localhost:3000/api/asistencias';
-
-    fetch(url, options)
+    fetch('http://localhost:3000/api/alumnos', options)
         .then(res => res.json())
-        .then(data => alert(JSON.stringify(data, null, 2)))
+        .then(data => {
+            alert(data.mensaje || JSON.stringify(data, null, 2));
+            document.querySelector('#form-alumno').reset();
+        })
         .catch(err => alert('Error: ' + err.message));
 }
 
+
+
+// === CARGAR CURSOS ===
 function cargarCursos() {
     fetch('http://localhost:3000/api/cursos')
         .then(res => res.json())
@@ -57,9 +43,13 @@ function cargarCursos() {
                 option.value = id;
                 select.append(option);
             }
-        });
+        })
+        .catch(err => console.error('Error al cargar cursos:', err));
 }
 
+
+
+// === CARGAR MATERIAS Y ALUMNOS ===
 function cargarMaterias(e) {
     const cursoId = e.target.value;
 
@@ -77,27 +67,30 @@ function cargarMaterias(e) {
                 option.value = materia.id;
                 select.append(option);
             }
-        });
+        })
+        .catch(err => console.error('Error al cargar materias:', err));
 
-    // Cargar alumnos
+    // Cargar alumnos del curso
     cargarAlumnos(cursoId);
 }
 
+
+
+// === CARGAR ALUMNOS DEL CURSO ===
 function cargarAlumnos(cursoId) {
     fetch(`http://localhost:3000/api/alumnos/${cursoId}`)
         .then(res => res.json())
         .then(data => {
-            const select = document.querySelector('#alumnos');
-            select.innerHTML = '<option value="">Seleccione un alumno</option>';
-            for (let alumno of data) {
-                const option = document.createElement('option');
-                option.textContent = `${alumno.apellido}, ${alumno.nombre}`;
-                option.value = alumno.id;
-                select.append(option);
-            }
-        });
+            // Este select ya no se usa directamente, así que no lo generamos
+            // Los alumnos se muestran en crearListaConBotones()
+            console.log(`Alumnos del curso ${cursoId} cargados (${data.length})`);
+        })
+        .catch(err => console.error('Error al cargar alumnos:', err));
 }
 
+
+
+// === CREAR LISTA DE ALUMNOS CON BOTONES DE ASISTENCIA ===
 function crearListaConBotones() {
     const materiaId = document.querySelector('#materias').value;
     const cursoId = document.querySelector('#cursos').value;
@@ -108,7 +101,12 @@ function crearListaConBotones() {
         .then(res => res.json())
         .then(alumnos => {
             const contenedor = document.querySelector('#lista-alumnos');
-            contenedor.innerHTML = ''; // Limpiar contenido anterior
+            contenedor.innerHTML = ''; // limpiar contenido anterior
+
+            if (alumnos.length === 0) {
+                contenedor.textContent = 'No hay alumnos en este curso.';
+                return;
+            }
 
             for (let alumno of alumnos) {
                 const fila = document.createElement('div');
@@ -137,8 +135,13 @@ function crearListaConBotones() {
                 fila.appendChild(botones);
                 contenedor.appendChild(fila);
             }
-        });
+        })
+        .catch(err => console.error('Error al crear lista de alumnos:', err));
 }
+
+
+
+// === ENVIAR ASISTENCIA ===
 function enviarAsistencia(tipo, alumnoId, materiaId) {
     const datos = { tipo, alumno: alumnoId, materia: materiaId };
 
@@ -150,12 +153,16 @@ function enviarAsistencia(tipo, alumnoId, materiaId) {
 
     fetch('http://localhost:3000/api/asistencias', options)
         .then(res => res.json())
-        .then(data => alert(JSON.stringify(data, null, 2)))
+        .then(data => {
+            if (data.error) alert('⚠️ ' + data.error);
+            else alert('✅ ' + data.mensaje);
+        })
         .catch(err => alert('Error: ' + err.message));
 }
 
 
 
-// Cargar cursos al iniciar
-cargarCursos();
-
+// === INICIO ===
+document.addEventListener('DOMContentLoaded', () => {
+    cargarCursos();
+});
