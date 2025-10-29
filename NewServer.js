@@ -29,13 +29,10 @@ connection.connect(err => {
     console.error('Error al conectar con MySQL:', err.message);
     return;
   }
-  console.log('✅ Base de datos conectada');
+  console.log('Nos conectamos a la Base de datos Molina');
 });
 
 
-// ======================================================
-// ================   RUTAS PRINCIPALES   ===============
-// ======================================================
 
 // Obtener todos los cursos
 app.get('/api/cursos', (req, res) => {
@@ -67,9 +64,6 @@ app.get('/api/alumnos/:cursoId', (req, res) => {
 });
 
 
-// ======================================================
-// ==============   INSERTAR NUEVO ALUMNO   =============
-// ======================================================
 app.post('/api/alumnos', (req, res) => {
   const { nombre, apellido, curso } = req.body;
 
@@ -94,9 +88,6 @@ app.post('/api/alumnos', (req, res) => {
 });
 
 
-// ======================================================
-// ===============   REGISTRAR ASISTENCIA   =============
-// ======================================================
 app.post('/api/asistencias', (req, res) => {
   const { tipo, alumno, materia } = req.body;
 
@@ -137,9 +128,6 @@ app.post('/api/asistencias', (req, res) => {
 });
 
 
-// ======================================================
-// =============   FUNCIÓN DE ABREVIACIÓN   =============
-// ======================================================
 function abreviarTipo(texto) {
   const mapa = {
     'Presente': 'P',
@@ -152,9 +140,6 @@ function abreviarTipo(texto) {
 }
 
 
-// ======================================================
-// ==================   INICIAR SERVIDOR   ===============
-// ======================================================
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
