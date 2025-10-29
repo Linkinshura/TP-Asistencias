@@ -9,28 +9,35 @@
 <body>
   <h1>Asistencia Escolar</h1>
 
-  <form id="Alumnos">
-    
-    <input type="text"  id="nombre" placeholder="nombre">
-    <input type="text"  id="apellido" placeholder="apellido">
-    <input type="text"  id="AlumCurso" placeholder="curso">
-    <input type="submit" placeholder="Nuevo Alumno" onsubmit="HandleSubmit(event)">
-
+  <!-- Formulario para agregar nuevo alumno -->
+  <form id="form-alumno" onsubmit="handleSubmit(event)">
+    <input type="text" id="nombre" placeholder="Nombre" required>
+    <input type="text" id="apellido" placeholder="Apellido" required>
+    <input type="number" id="alumCurso" placeholder="ID del curso" required>
+    <button type="submit">Agregar Alumno</button>
   </form>
 
+  <hr>
+
+  <!-- Selector de curso -->
   <label for="cursos">Curso:</label>
-  <select name="curso" id="cursos" onchange="cargarMaterias(event)">
+  <select id="cursos" onchange="cargarMaterias(event)">
+    <option value="">Seleccionar curso</option>
   </select>
 
+  <!-- Selector de materia -->
   <label for="materias">Materia:</label>
-  <select name="materia" id="materias" onchange="crearListaConBotones()">
+  <select id="materias" onchange="crearListaConBotones()">
+    <option value="">Seleccionar materia</option>
   </select>
 
-<div id="lista-alumnos"></div>
+  <hr>
 
+  <!-- Lista de alumnos y botones de asistencia -->
+  <div id="lista-alumnos"></div>
   <div id="botones"></div>
 
+  <!-- Script principal -->
   <script src="main.js"></script>
 </body>
 </html>
-
