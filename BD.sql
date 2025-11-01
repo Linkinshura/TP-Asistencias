@@ -38,3 +38,10 @@ CREATE TABLE Asistencias (
     FOREIGN KEY (alumno) REFERENCES Alumnos(id),
     FOREIGN KEY (materia) REFERENCES Materias(id)
 );
+
+
+
+
+ALTER TABLE Asistencias
+ADD COLUMN fecha_ingreso DATETIME NULL,
+ADD COLUMN fecha_egreso DATETIME NULL;
