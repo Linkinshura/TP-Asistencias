@@ -76,19 +76,6 @@ function cargarMaterias(e) {
 
 
 
-// === CARGAR ALUMNOS DEL CURSO ===
-function cargarAlumnos(cursoId) {
-    fetch(`http://localhost:3000/api/alumnos/${cursoId}`)
-        .then(res => res.json())
-        .then(data => {
-            // Este select ya no se usa directamente, así que no lo generamos
-            // Los alumnos se muestran en crearListaConBotones()
-            console.log(`Alumnos del curso ${cursoId} cargados (${data.length})`);
-        })
-        .catch(err => console.error('Error al cargar alumnos:', err));
-}
-
-
 
 // === CREAR LISTA DE ALUMNOS CON BOTONES DE ASISTENCIA ===
 function crearListaConBotones() {
