@@ -149,6 +149,74 @@ function enviarAsistencia(tipo, alumnoId, materiaId) {
 
 
 
+async function cargarAsistencias() {
+  const curso = document.getElementById("cursos").value;
+  const materia = document.getElementById("materias").value;
+  const fecha = document.getElementById("fechaFiltro").value;
+
+  if(!curso || !materia || !fecha) {
+    alert("Elegí curso, materia y fecha");
+    return;
+  }
+
+  const res = await fetch(`/api/asistencias?fecha=${fecha}&curso=${curso}&materia=${materia}`);
+  const data = await res.json();
+  
+  const tabla = document.getElementById("tablaAsistencias");
+  const cuerpo = tabla.querySelector("tbody");
+  cuerpo.innerHTML = "";
+
+  if (data.asistencias?.length > 0) {
+    tabla.style.display = "table";
+    
+    data.asistencias.forEach(a => {
+      cuerpo.innerHTML += `
+        <tr>
+          <td>${a.alumno_id}</td>
+          <td>${a.nombre}</td>
+          <td>${a.apellido}</td>
+          <td>${a.tipo}</td>
+          <td>${a.fecha_ingreso ?? "-"}</td>
+          <td>${a.fecha_egreso ?? "-"}</td>
+          <td>${a.id}</td>
+          <td>
+            <button onclick="editarAsistencia(${a.id})">✏️</button>
+            <button onclick="eliminarAsistencia(${a.id})">🗑️</button>
+          </td>
+        </tr>
+      `;
+    });
+
+  } else {
+    tabla.style.display = "none";
+    alert("No hay asistencias ese día");
+  }
+}
+
+async function eliminarAsistencia(id) {
+  if(!confirm("¿Eliminar asistencia?")) return;
+
+  await fetch(`/api/asistencias/${id}`, { method: "DELETE" });
+  cargarAsistencias();
+}
+
+async function editarAsistencia(id) {
+  const tipo = prompt("Nuevo tipo (P, A, T, RA, PA):");
+  const fecha_ingreso = prompt("Fecha ingreso (YYYY-MM-DD HH:MM) o vacío:");
+  const fecha_egreso = prompt("Fecha egreso (YYYY-MM-DD HH:MM) o vacío:");
+
+  await fetch(`/api/asistencias/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ tipo, fecha_ingreso, fecha_egreso })
+  });
+
+  cargarAsistencias();
+}
+
+
+
+
 // === INICIO ===
 document.addEventListener('DOMContentLoaded', () => {
     cargarCursos();
