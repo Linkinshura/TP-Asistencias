@@ -13,7 +13,12 @@
   <form id="form-alumno" onsubmit="handleSubmit(event)">
     <input type="text" id="nombre" placeholder="Nombre" required>
     <input type="text" id="apellido" placeholder="Apellido" required>
-    <input type="number" id="alumCurso" placeholder="ID del curso" required>
+
+    <!-- Reemplazamos input por select para elegir curso -->
+    <select id="alumCurso" required>
+      <option value="">Seleccionar curso...</option>
+    </select>
+
     <input type="submit" value="Agregar Alumno">
   </form>
 
@@ -31,28 +36,30 @@
     <option value="">Seleccionar materia</option>
   </select>
 
-<label>Fecha:</label>
-<input type="date" id="fechaFiltro" onchange="cargarAsistencias()">
+  <!-- Selector de fecha para filtrar asistencias -->
+  <label>Fecha:</label>
+  <input type="date" id="fechaFiltro" onchange="cargarAsistencias()">
 
-<button onclick="cargarAsistencias()">Buscar asistencia</button>
+  <button onclick="cargarAsistencias()">Buscar asistencia</button>
 
-<hr>
+  <hr>
 
-<table id="tablaAsistencias" border="1" style="width:100%; display:none;">
-  <thead>
-    <tr>
-      <th>ID Alumno</th>
-      <th>Nombre</th>
-      <th>Apellido</th>
-      <th>Asistencia</th>
-      <th>Fecha Ingreso</th>
-      <th>Fecha Egreso</th>
-      <th>ID Registro</th>
-      <th>Acciones</th>
-    </tr>
-  </thead>
-  <tbody></tbody>
-</table>
+  <!-- Tabla de asistencias -->
+  <table id="tablaAsistencias" border="1" style="width:100%; display:none;">
+    <thead>
+      <tr>
+        <th>ID Alumno</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Asistencia</th>
+        <th>Fecha Ingreso</th>
+        <th>Fecha Egreso</th>
+        <th>ID Registro</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <hr>
 
@@ -62,5 +69,24 @@
 
   <!-- Script principal -->
   <script src="main.js"></script>
+
+  <script>
+    // Cargar cursos para el select de nuevo alumno al cargar la página
+    async function cargarCursosAlCrearAlumno() {
+      const res = await fetch('/api/cursos');
+      const cursos = await res.json();
+      const select = document.getElementById('alumCurso');
+
+      cursos.forEach(curso => {
+        const option = document.createElement('option');
+        option.value = curso.id;
+        option.textContent = `${curso.anio}° ${curso.division} - ${curso.especialidad}`;
+        select.appendChild(option);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', cargarCursosAlCrearAlumno);
+  </script>
+
 </body>
 </html>
