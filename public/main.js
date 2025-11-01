@@ -106,8 +106,21 @@ function crearListaConBotones() {
                 const botones = document.createElement('div');
                 botones.className = 'botones-asistencia';
 
-                const tipos = ['Presente', 'Ausente', 'Tarde', 'Retiro Anticipado'];
+                const tipos = [
+  { texto: "Presente", autoHora: null },
+  { texto: "Ausente", autoHora: null },
+  { texto: "Tarde", autoHora: "ingreso" },
+  { texto: "Presente con Atraso", autoHora: "ingreso" },
+  { texto: "Retiro Anticipado", autoHora: "egreso" }
+];
 
+tipos.forEach(t => {
+  const btn = document.createElement("button");
+  btn.textContent = t.texto;
+  btn.className = "btn-asistencia"; // si ya usás clases, mantenelas
+  btn.onclick = () => enviarAsistencia(alumno.id, materiaId, t.texto, t.autoHora);
+  contenedorBotones.appendChild(btn);
+});
                 for (let tipo of tipos) {
                     const boton = document.createElement('button');
                     boton.textContent = tipo;
