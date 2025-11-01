@@ -70,22 +70,26 @@ app.post('/api/alumnos', (req, res) => {
   if (!nombre || !apellido || !curso) {
     return res.status(400).json({ error: 'Faltan datos requeridos (nombre, apellido, curso)' });
   }
-const query = 'INSERT INTO Alumnos (nombre, apellido, curso) VALUES (?, ?, ?)';
-const data = [nombre, apellido, curso];
+
+  const query = 'INSERT INTO Alumnos (dni, nombre, apellido, curso) VALUES (?, ?, ?, ?)';
+  const data = [null, nombre, apellido, curso];
 
   connection.query(query, data, (err, result) => {
-    if (err) return res.status(500).json({ error: 'Error al agregar alumno', detalle: err.message });
+    if (err) {
+      return res.status(500).json({ error: 'Error al agregar alumno', detalle: err.message });
+    }
 
-    const nuevoAlumno = {
-      id: result.insertId,
-      nombre,
-      apellido,
-      curso
-    };
-    res.status(201).json({ mensaje: 'Alumno agregado con éxito', alumno: nuevoAlumno });
+    res.status(201).json({
+      mensaje: 'Alumno agregado con éxito',
+      alumno: {
+        id: result.insertId,
+        nombre,
+        apellido,
+        curso
+      }
+    });
   });
 });
-
 
 app.get('/api/asistencias', (req, res) => {
   // Se usa una fecha o la actual 
