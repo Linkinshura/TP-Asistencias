@@ -136,7 +136,7 @@ app.get('/api/asistencias', (req, res) => {
 
 
 app.post('/api/asistencias', (req, res) => {
-  const { tipo, alumno, materia } = req.body;
+  const { tipo, alumno, materia, autoHora } = req.body;
 
   if (!tipo || !alumno || !materia) {
     return res.status(400).json({ error: 'Faltan datos requeridos' });
@@ -144,7 +144,6 @@ app.post('/api/asistencias', (req, res) => {
 
   const tipoAbreviado = abreviarTipo(tipo);
 
-  // Verificar si ya existe una asistencia hoy
   const verificar = `
     SELECT id FROM Asistencias
     WHERE alumno = ? AND materia = ? AND DATE(creado) = CURDATE()
@@ -157,19 +156,21 @@ app.post('/api/asistencias', (req, res) => {
       return res.status(409).json({ error: 'Ya se registró asistencia para este alumno y materia hoy.' });
     }
 
-    const insertar = 'INSERT INTO Asistencias (tipo, alumno, materia) VALUES (?, ?, ?)';
-    connection.query(insertar, [tipoAbreviado, alumno, materia], (err, result) => {
+    let query = `INSERT INTO Asistencias (tipo, alumno, materia`;
+    let values = [tipoAbreviado, alumno, materia];
+
+    if (autoHora === "ingreso") {
+      query += `, fecha_ingreso) VALUES (?, ?, ?, NOW())`;
+    } else if (autoHora === "egreso") {
+      query += `, fecha_egreso) VALUES (?, ?, ?, NOW())`;
+    } else {
+      query += `) VALUES (?, ?, ?)`;
+    }
+
+    connection.query(query, values, (err, result) => {
       if (err) return res.status(500).json({ error: 'Error al guardar asistencia', detalle: err.message });
 
-      res.status(201).json({
-        mensaje: 'Asistencia registrada con éxito',
-        asistencia: {
-          id: result.insertId,
-          tipo: tipoAbreviado,
-          alumno,
-          materia
-        }
-      });
+      res.status(201).json({ mensaje: 'Asistencia registrada con éxito' });
     });
   });
 });
