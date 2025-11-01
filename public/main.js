@@ -228,6 +228,23 @@ async function editarAsistencia(id) {
 }
 
 
+async function enviarAsistencia(alumnoId, materiaId, tipo, autoHora) {
+  try {
+    await fetch("http://localhost:3000/api/asistencias", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ alumno: alumnoId, materia: materiaId, tipo, autoHora })
+    });
+
+    alert(`${tipo} registrada`);
+    crearListaConBotones(); // refresca lista
+  } catch (err) {
+    console.error(err);
+    alert("Error registrando asistencia");
+  }
+}
+
+
 
 
 // === INICIO ===
