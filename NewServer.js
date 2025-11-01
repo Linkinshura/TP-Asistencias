@@ -173,6 +173,28 @@ app.post('/api/asistencias', (req, res) => {
     });
   });
 });
+app.get('/api/asistencias', (req, res) => {
+  const { fecha, curso, materia } = req.query;
+
+  const query = `
+    SELECT 
+      A.id,
+      A.tipo,
+      A.fecha_ingreso,
+      A.fecha_egreso,
+      Al.id AS alumno_id,
+      Al.nombre,
+      Al.apellido
+    FROM Asistencias A
+    INNER JOIN Alumnos Al ON A.alumno = Al.id
+    WHERE DATE(A.creado) = ? AND Al.curso = ? AND A.materia = ?
+  `;
+
+  connection.query(query, [fecha, curso, materia], (err, rows) => {
+    if (err) return res.status(500).json(err);
+    res.json({ asistencias: rows });
+  });
+});
 
 
 function abreviarTipo(texto) {
