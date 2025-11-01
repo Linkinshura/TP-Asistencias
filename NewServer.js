@@ -91,49 +91,6 @@ app.post('/api/alumnos', (req, res) => {
   });
 });
 
-app.get('/api/asistencias', (req, res) => {
-  // Se usa una fecha o la actual 
-  const { fecha } = req.query;
-  const fechaFiltro = fecha || new Date().toISOString().slice(0, 10); // formato YYYY-MM-DD
-
-  const query = `
-    SELECT 
-      A.id,
-      A.tipo,
-      A.creado,
-      Al.nombre AS alumno_nombre,
-      Al.apellido AS alumno_apellido,
-      M.nombre AS materia_nombre,
-      C.anio,
-      C.division,
-      C.especialidad
-    FROM Asistencias A
-    INNER JOIN Alumnos Al ON A.alumno = Al.id
-    INNER JOIN Materias M ON A.materia = M.id
-    INNER JOIN Cursos C ON Al.curso = C.id
-    WHERE DATE(A.creado) = ?
-    ORDER BY Al.apellido, Al.nombre
-  `;
-
-  connection.query(query, [fechaFiltro], (err, rows) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error al obtener asistencias', detalle: err.message });
-    }
-
-    if (rows.length === 0) {
-      return res.status(404).json({ mensaje: `No hay asistencias registradas para la fecha ${fechaFiltro}` });
-    }
-
-    res.status(200).json({
-      fecha: fechaFiltro,
-      total: rows.length,
-      asistencias: rows
-    });
-  });
-});
-
-
-
 
 app.post('/api/asistencias', (req, res) => {
   const { tipo, alumno, materia, autoHora } = req.body;
@@ -176,8 +133,9 @@ app.post('/api/asistencias', (req, res) => {
 });
 app.get('/api/asistencias', (req, res) => {
   const { fecha, curso, materia } = req.query;
+  const fechaFiltro = fecha || new Date().toISOString().slice(0,10);
 
-  const query = `
+  let query = `
     SELECT 
       A.id,
       A.tipo,
@@ -188,11 +146,25 @@ app.get('/api/asistencias', (req, res) => {
       Al.apellido
     FROM Asistencias A
     INNER JOIN Alumnos Al ON A.alumno = Al.id
-    WHERE DATE(A.creado) = ? AND Al.curso = ? AND A.materia = ?
+    INNER JOIN Materias M ON A.materia = M.id
+    INNER JOIN Cursos C ON Al.curso = C.id
+    WHERE DATE(A.creado) = ?
   `;
+  const params = [fechaFiltro];
 
-  connection.query(query, [fecha, curso, materia], (err, rows) => {
-    if (err) return res.status(500).json(err);
+  if(curso) {
+    query += ' AND C.id = ?';
+    params.push(curso);
+  }
+  if(materia) {
+    query += ' AND M.id = ?';
+    params.push(materia);
+  }
+
+  query += ' ORDER BY Al.apellido, Al.nombre';
+
+  connection.query(query, params, (err, rows) => {
+    if(err) return res.status(500).json({ error: err.message });
     res.json({ asistencias: rows });
   });
 });
