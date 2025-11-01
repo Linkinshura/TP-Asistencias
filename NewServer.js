@@ -70,9 +70,8 @@ app.post('/api/alumnos', (req, res) => {
   if (!nombre || !apellido || !curso) {
     return res.status(400).json({ error: 'Faltan datos requeridos (nombre, apellido, curso)' });
   }
-
-  const data = [null, nombre, apellido, curso];
-  const query = 'INSERT INTO Alumnos VALUES (?, ?, ?, ?)';
+const query = 'INSERT INTO Alumnos (nombre, apellido, curso) VALUES (?, ?, ?)';
+const data = [nombre, apellido, curso];
 
   connection.query(query, data, (err, result) => {
     if (err) return res.status(500).json({ error: 'Error al agregar alumno', detalle: err.message });
