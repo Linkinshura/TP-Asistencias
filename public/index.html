@@ -31,6 +31,29 @@
     <option value="">Seleccionar materia</option>
   </select>
 
+<label>Fecha:</label>
+<input type="date" id="fechaFiltro" onchange="cargarAsistencias()">
+
+<button onclick="cargarAsistencias()">Buscar asistencia</button>
+
+<hr>
+
+<table id="tablaAsistencias" border="1" style="width:100%; display:none;">
+  <thead>
+    <tr>
+      <th>ID Alumno</th>
+      <th>Nombre</th>
+      <th>Apellido</th>
+      <th>Asistencia</th>
+      <th>Fecha Ingreso</th>
+      <th>Fecha Egreso</th>
+      <th>ID Registro</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+</table>
+
   <hr>
 
   <!-- Lista de alumnos y botones de asistencia -->
