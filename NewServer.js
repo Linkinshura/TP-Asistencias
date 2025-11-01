@@ -209,6 +209,30 @@ function abreviarTipo(texto) {
 }
 
 
+app.delete('/api/asistencias/:id', (req,res)=>{
+  connection.query("DELETE FROM Asistencias WHERE id = ?", [req.params.id], err=>{
+    if(err) return res.status(500).json(err);
+    res.json({msg:"Eliminada"});
+  });
+});
+
+app.put('/api/asistencias/:id', (req,res)=>{
+  const { tipo, fecha_ingreso, fecha_egreso } = req.body;
+
+  const q = `
+    UPDATE Asistencias 
+      SET tipo=?, fecha_ingreso=?, fecha_egreso=? 
+    WHERE id=?
+  `;
+
+  connection.query(q,[tipo, fecha_ingreso || null, fecha_egreso || null, req.params.id], err=>{
+    if(err) return res.status(500).json(err);
+    res.json({msg:"Actualizada"});
+  });
+});
+
+
+
 app.listen(PORT, () => {
   console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
 });
