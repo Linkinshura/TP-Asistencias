@@ -27,34 +27,33 @@ function handleSubmit(event) {
         .catch(err => alert('Error: ' + err.message));
 }
 
-// === CARGAR CURSOS PARA FILTRO Y FORMULARIO ===
-async function cargarCursos() {
-    try {
-        const res = await fetch('http://localhost:3000/api/cursos');
-        const cursos = await res.json();
 
-        // Select de filtros
-        const selectFiltro = document.querySelector('#cursos');
-        selectFiltro.innerHTML = '<option value="">Seleccionar curso</option>';
-        // Select del form de nuevo alumno
-        const selectForm = document.querySelector('#alumCurso');
-        selectForm.innerHTML = '<option value="">Seleccionar curso...</option>';
+function cargarCursos() {
+    fetch('http://localhost:3000/api/cursos')
+        .then(res => res.json())
+        .then(data => {
+            // Select de filtro
+            const selectFiltro = document.querySelector('#cursos');
+            selectFiltro.innerHTML = '<option value="">Seleccione un curso</option>';
+            // Select del formulario
+            const selectForm = document.querySelector('#alumCurso');
+            selectForm.innerHTML = '<option value="">Seleccione un curso</option>';
 
-        cursos.forEach(curso => {
-            const texto = `${curso.anio}° ${curso.division} - ${curso.especialidad}`;
-            const optionFiltro = document.createElement('option');
-            optionFiltro.value = curso.id;
-            optionFiltro.textContent = texto;
-            selectFiltro.appendChild(optionFiltro);
+            for (let curso of data) {
+                const { anio, division, especialidad, id } = curso;
 
-            const optionForm = document.createElement('option');
-            optionForm.value = curso.id;
-            optionForm.textContent = texto;
-            selectForm.appendChild(optionForm);
-        });
-    } catch (err) {
-        console.error('Error al cargar cursos:', err);
-    }
+                const optionFiltro = document.createElement('option');
+                optionFiltro.textContent = `${anio}° ${division} - ${especialidad}`;
+                optionFiltro.value = id;
+                selectFiltro.append(optionFiltro);
+
+                const optionForm = document.createElement('option');
+                optionForm.textContent = `${anio}° ${division} - ${especialidad}`;
+                optionForm.value = id;
+                selectForm.append(optionForm);
+            }
+        })
+        .catch(err => console.error('Error al cargar cursos:', err));
 }
 
 // === CARGAR MATERIAS Y ALUMNOS ===
