@@ -70,5 +70,3 @@ INSERT INTO materias (nombre, horas, profesor, contraturno, curso) VALUES
 ("Historia", 3, "David Lizzaraga", 0, 3),
 ("Proyecto Informatico", 4, "Agustin Pecile", 0, 3),
 ("Geografia", 3, "Guadalupe Cortez Torres", 0, 3);
-
-<--- Insert para hacer en JS INSERT INTO asistencias (tipo, alumno, materia)

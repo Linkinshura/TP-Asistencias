@@ -1,53 +1,167 @@
-/* ==== Tabla de Asistencias ==== */
+/* ==== ESTILO GENERAL ==== */
+body {
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  background: #f5f7fa;
+  color: #333;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+/* ==== FORMULARIOS ==== */
+form#form-alumno {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+form#form-alumno input,
+form#form-alumno select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+form#form-alumno input:focus,
+form#form-alumno select:focus {
+  outline: none;
+  border-color: #4a90e2;
+}
+
+form#form-alumno input[type="submit"] {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+form#form-alumno input[type="submit"]:hover {
+  background-color: #357abd;
+}
+
+/* ==== SELECTORES DE CURSO Y MATERIA ==== */
+label {
+  font-weight: 600;
+  margin-right: 5px;
+}
+
+#cursos, #materias, #fechaFiltro, button {
+  margin: 5px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #357abd;
+}
+
+/* ==== TABLA ==== */
 #tablaAsistencias {
   margin: 30px auto;
   border-collapse: collapse;
-  width: 90%;
+  width: 95%;
   max-width: 900px;
-  font-size: 14px;
-  text-align: center;
-  background-color: #fff;
+  background: white;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.05);
   border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
 #tablaAsistencias th, #tablaAsistencias td {
   padding: 10px 12px;
   border-bottom: 1px solid #e0e0e0;
+  text-align: center;
 }
 
 #tablaAsistencias th {
   background-color: #4a90e2;
   color: white;
-  font-weight: 600;
 }
 
 #tablaAsistencias tr:nth-child(even) {
-  background-color: #f7f9fb;
+  background-color: #f9f9f9;
 }
 
+/* ==== BOTONES EN TABLA ==== */
 #tablaAsistencias button {
-  padding: 5px 10px;
-  margin: 0 2px;
   border: none;
+  padding: 5px 8px;
   border-radius: 6px;
+  margin: 0 2px;
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 600;
+  color: white;
   transition: all 0.2s ease;
+}
+
+#tablaAsistencias button:nth-child(1) {
+  background-color: #f1c40f; /* editar */
+}
+#tablaAsistencias button:nth-child(2) {
+  background-color: #e74c3c; /* eliminar */
 }
 
 #tablaAsistencias button:hover {
   opacity: 0.85;
 }
 
-#tablaAsistencias button:nth-child(1) {
-  background-color: #f39c12; /* Editar */
-  color: white;
+/* ==== LISTA DE ALUMNOS ==== */
+#lista-alumnos {
+  max-width: 800px;
+  margin: 20px auto;
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 3px 8px rgba;
+  font-size:20px; 
 }
 
-#tablaAsistencias button:nth-child(2) {
-  background-color: #e74c3c; /* Eliminar */
-  color: white;
+/* Colores específicos */
+.btn-presente {
+  background-color: #27ae60; /* Verde */
+}
+
+.btn-ausente {
+  background-color: #e74c3c; /* Rojo */
+}
+
+.btn-tarde {
+  background-color: #e67e22; /* Naranja */
+}
+
+.btn-presente-atraso {
+  background-color: #8e44ad; /* Violeta */
+}
+
+.btn-retiro {
+  background-color: #3498db; /* Celeste */
 }

@@ -109,20 +109,21 @@ function crearListaConBotones() {
                 botones.className = 'botones-asistencia';
 
                 const tipos = [
-                    { texto: "Presente", autoHora: null },
-                    { texto: "Ausente", autoHora: null },
-                    { texto: "Tarde", autoHora: "ingreso" },
-                    { texto: "Presente con Atraso", autoHora: "ingreso" },
-                    { texto: "Retiro Anticipado", autoHora: "egreso" }
-                ];
+  { texto: "Presente", clase: "btn-presente", autoHora: null },
+  { texto: "Ausente", clase: "btn-ausente", autoHora: null },
+  { texto: "Tarde", clase: "btn-tarde", autoHora: "ingreso" },
+  { texto: "Presente con Atraso", clase: "btn-presente-atraso", autoHora: "ingreso" },
+  { texto: "Retiro Anticipado", clase: "btn-retiro", autoHora: "egreso" }
+];
 
-                tipos.forEach(t => {
-                    const btn = document.createElement("button");
-                    btn.textContent = t.texto;
-                    btn.className = "btn-asistencia";
-                    btn.onclick = () => enviarAsistencia(alumno.id, materiaId, t.texto, t.autoHora);
-                    botones.appendChild(btn);
-                });
+tipos.forEach(t => {
+  const btn = document.createElement("button");
+  btn.textContent = t.texto;
+  btn.className = `btn-asistencia ${t.clase}`;
+  btn.onclick = () => enviarAsistencia(alumno.id, materiaId, t.texto, t.autoHora);
+  botones.appendChild(btn);
+});
+
 
                 fila.appendChild(nombre);
                 fila.appendChild(botones);
@@ -154,47 +155,48 @@ async function enviarAsistencia(alumnoId, materiaId, tipo, autoHora) {
 
 // === TABLA DE ASISTENCIAS ===
 async function cargarAsistencias() {
-    const curso = document.getElementById("cursos").value;
-    const materia = document.getElementById("materias").value;
-    const fecha = document.getElementById("fechaFiltro").value;
+  const curso = document.getElementById("cursos").value;
+  const materia = document.getElementById("materias").value;
+  const fecha = document.getElementById("fechaFiltro").value;
 
-    if(!curso || !materia || !fecha) {
-        alert("Elegí curso, materia y fecha");
-        return;
-    }
+  if (!curso || !materia || !fecha) {
+    alert("Elegí curso, materia y fecha");
+    return;
+  }
 
-    const res = await fetch(`/api/asistencias?fecha=${fecha}&curso=${curso}&materia=${materia}`);
-    const data = await res.json();
+  const res = await fetch(`/api/asistencias?fecha=${fecha}&curso=${curso}&materia=${materia}`);
+  const data = await res.json();
 
-    const tabla = document.getElementById("tablaAsistencias");
-    const cuerpo = tabla.querySelector("tbody");
-    cuerpo.innerHTML = "";
+  const tabla = document.getElementById("tablaAsistencias");
+  const cuerpo = tabla.querySelector("tbody");
+  cuerpo.innerHTML = "";
 
-    if (data.asistencias?.length > 0) {
-        tabla.style.display = "table";
+  if (data.asistencias?.length > 0) {
+    tabla.style.display = "table";
 
-        data.asistencias.forEach(a => {
-            cuerpo.innerHTML += `
-            <tr>
-                <td>${a.alumno}</td>
-                <td>${a.alumno_nombre}</td>
-                <td>${a.alumno_apellido}</td>
-                <td>${a.tipo}</td>
-                <td>${a.fecha_ingreso ?? "-"}</td>
-                <td>${a.fecha_egreso ?? "-"}</td>
-                <td>${a.id}</td>
-                <td>
-                    <button onclick="editarAsistencia(${a.id})">✏️</button>
-                    <button onclick="eliminarAsistencia(${a.id})">🗑️</button>
-                </td>
-            </tr>
-            `;
-        });
-    } else {
-        tabla.style.display = "none";
-        alert("No hay asistencias ese día");
-    }
+    data.asistencias.forEach(a => {
+      cuerpo.innerHTML += `
+        <tr>
+          <td>${a.alumno_id || '-'}</td>
+          <td>${a.nombre || '-'}</td>
+          <td>${a.apellido || '-'}</td>
+          <td>${a.tipo || '-'}</td>
+          <td>${a.fecha_ingreso ?? '-'}</td>
+          <td>${a.fecha_egreso ?? '-'}</td>
+          <td>${a.id || '-'}</td>
+          <td>
+            <button onclick="editarAsistencia(${a.id})">✏️</button>
+            <button onclick="eliminarAsistencia(${a.id})">🗑️</button>
+          </td>
+        </tr>
+      `;
+    });
+  } else {
+    tabla.style.display = "none";
+    alert("No hay asistencias ese día");
+  }
 }
+
 
 // === ELIMINAR ASISTENCIA ===
 async function eliminarAsistencia(id) {
