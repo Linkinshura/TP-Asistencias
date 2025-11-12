@@ -1,92 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Asistencia Escolar</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asistencias Alumnos</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Asistencia Escolar</h1>
+<h1>Gestión de Asistencias</h1>
 
-  <!-- Formulario para agregar nuevo alumno -->
-  <form id="form-alumno" onsubmit="handleSubmit(event)">
-    <input type="text" id="nombre" placeholder="Nombre" required>
-    <input type="text" id="apellido" placeholder="Apellido" required>
+<section id="crear-alumno">
+  <h2>Crear Alumno</h2>
+  <input type="text" id="nombre" placeholder="Nombre">
+  <input type="text" id="apellido" placeholder="Apellido">
+  <select id="selectCurso"></select>
+  <button id="btnCrearAlumno">Crear</button>
+</section>
 
-    <!-- Reemplazamos input por select para elegir curso -->
-    <select id="alumCurso" required>
-      <option value="">Seleccionar curso...</option>
-    </select>
+<section id="registrar-asistencia">
+  <h2>Registrar Asistencia</h2>
+  <select id="filtroCurso"></select>
+  <select id="filtroMateria" disabled></select>
+  <div id="listaAlumnos"></div>
+</section>
 
-    <input type="submit" value="Agregar Alumno">
-  </form>
+<section id="consultar-fecha">
+  <h2>Consultar Asistencias</h2>
+  <input type="date" id="fechaFiltro">
+  <select id="consultaCurso"></select>
+  <select id="consultaMateria" disabled></select>
+  <button id="btnConsultar">Consultar</button>
 
-  <hr>
-
-  <!-- Selector de curso -->
-  <label for="cursos">Curso:</label>
-  <select id="cursos" onchange="cargarMaterias(event)">
-    <option value="">Seleccionar curso</option>
-  </select>
-
-  <!-- Selector de materia -->
-  <label for="materias">Materia:</label>
-  <select id="materias" onchange="crearListaConBotones()">
-    <option value="">Seleccionar materia</option>
-  </select>
-
-  <!-- Selector de fecha para filtrar asistencias -->
-  <label>Fecha:</label>
-  <input type="date" id="fechaFiltro" onchange="cargarAsistencias()">
-
-  <button onclick="cargarAsistencias()">Buscar asistencia</button>
-
-  <hr>
-
-  <!-- Tabla de asistencias -->
-  <table id="tablaAsistencias" border="1" style="width:100%; display:none;">
+  <table id="tablaAsistencias">
     <thead>
       <tr>
+        <th>ID Registro</th>
         <th>ID Alumno</th>
         <th>Nombre</th>
         <th>Apellido</th>
-        <th>Asistencia</th>
-        <th>Fecha Ingreso</th>
-        <th>Fecha Egreso</th>
-        <th>ID Registro</th>
+        <th>Tipo</th>
+        <th>Hora Ingreso</th>
+        <th>Hora Egreso</th>
         <th>Acciones</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
+</section>
 
-  <hr>
-
-  <!-- Lista de alumnos y botones de asistencia -->
-  <div id="lista-alumnos"></div>
-  <div id="botones"></div>
-
-  <!-- Script principal -->
-  <script src="main.js"></script>
-
-  <script>
-    // Cargar cursos para el select de nuevo alumno al cargar la página
-    async function cargarCursosAlCrearAlumno() {
-      const res = await fetch('/api/cursos');
-      const cursos = await res.json();
-      const select = document.getElementById('alumCurso');
-
-      cursos.forEach(curso => {
-        const option = document.createElement('option');
-        option.value = curso.id;
-        option.textContent = `${curso.anio}° ${curso.division} - ${curso.especialidad}`;
-        select.appendChild(option);
-      });
-    }
-
-    document.addEventListener('DOMContentLoaded', cargarCursosAlCrearAlumno);
-  </script>
-
+<script src="main.js"></script>
 </body>
 </html>
