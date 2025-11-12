@@ -1,227 +1,109 @@
-// === FORMULARIO: AGREGAR NUEVO ALUMNO ===
-function handleSubmit(event) {
-    event.preventDefault(); // evita recargar la página
-
-    const nombre = document.querySelector('#nombre').value.trim();
-    const apellido = document.querySelector('#apellido').value.trim();
-    const curso = document.querySelector('#alumCurso').value;
-
-    if (!nombre || !apellido || !curso) {
-        alert('Por favor, completá todos los campos.');
-        return;
-    }
-
-    const datos = { nombre, apellido, curso };
-    const options = {
-        method: 'POST',
-        body: JSON.stringify(datos),
-        headers: { 'Content-Type': 'application/json' }
-    };
-
-    fetch('http://localhost:3000/api/alumnos', options)
-        .then(res => res.json())
-        .then(data => {
-            alert(data.mensaje || JSON.stringify(data, null, 2));
-            document.querySelector('#form-alumno').reset();
-        })
-        .catch(err => alert('Error: ' + err.message));
-}
-
-
-function cargarCursos() {
-    fetch('http://localhost:3000/api/cursos')
-        .then(res => res.json())
-        .then(data => {
-            // Select de filtro
-            const selectFiltro = document.querySelector('#cursos');
-            selectFiltro.innerHTML = '<option value="">Seleccione un curso</option>';
-            // Select del formulario
-            const selectForm = document.querySelector('#alumCurso');
-            selectForm.innerHTML = '<option value="">Seleccione un curso</option>';
-
-            for (let curso of data) {
-                const { anio, division, especialidad, id } = curso;
-
-                const optionFiltro = document.createElement('option');
-                optionFiltro.textContent = `${anio}° ${division} - ${especialidad}`;
-                optionFiltro.value = id;
-                selectFiltro.append(optionFiltro);
-
-                const optionForm = document.createElement('option');
-                optionForm.textContent = `${anio}° ${division} - ${especialidad}`;
-                optionForm.value = id;
-                selectForm.append(optionForm);
-            }
-        })
-        .catch(err => console.error('Error al cargar cursos:', err));
-}
-
-// === CARGAR MATERIAS Y ALUMNOS ===
-function cargarMaterias(e) {
-    const cursoId = e.target.value;
-    if (!cursoId) return;
-
-    // Cargar materias
-    fetch(`http://localhost:3000/api/materias/${cursoId}`)
-        .then(res => res.json())
-        .then(data => {
-            const select = document.querySelector('#materias');
-            select.innerHTML = '<option value="">Seleccione una materia</option>';
-            for (let materia of data) {
-                const option = document.createElement('option');
-                option.textContent = materia.nombre;
-                option.value = materia.id;
-                select.append(option);
-            }
-        })
-        .catch(err => console.error('Error al cargar materias:', err));
-
-    // Cargar alumnos del curso
-    cargarAlumnos(cursoId);
-}
-
-// === CREAR LISTA DE ALUMNOS CON BOTONES DE ASISTENCIA ===
-function crearListaConBotones() {
-    const materiaId = document.querySelector('#materias').value;
-    const cursoId = document.querySelector('#cursos').value;
-    if (!materiaId || !cursoId) return;
-
-    fetch(`http://localhost:3000/api/alumnos/${cursoId}`)
-        .then(res => res.json())
-        .then(alumnos => {
-            const contenedor = document.querySelector('#lista-alumnos');
-            contenedor.innerHTML = ''; // limpiar
-
-            if (alumnos.length === 0) {
-                contenedor.textContent = 'No hay alumnos en este curso.';
-                return;
-            }
-
-            for (let alumno of alumnos) {
-                const fila = document.createElement('div');
-                fila.className = 'fila-alumno';
-
-                const nombre = document.createElement('span');
-                nombre.textContent = `${alumno.apellido}, ${alumno.nombre}`;
-                nombre.className = 'nombre-alumno';
-
-                const botones = document.createElement('div');
-                botones.className = 'botones-asistencia';
-
-                const tipos = [
-  { texto: "Presente", clase: "btn-presente", autoHora: null },
-  { texto: "Ausente", clase: "btn-ausente", autoHora: null },
-  { texto: "Tarde", clase: "btn-tarde", autoHora: "ingreso" },
-  { texto: "Presente con Atraso", clase: "btn-presente-atraso", autoHora: "ingreso" },
-  { texto: "Retiro Anticipado", clase: "btn-retiro", autoHora: "egreso" }
-];
-
-tipos.forEach(t => {
-  const btn = document.createElement("button");
-  btn.textContent = t.texto;
-  btn.className = `btn-asistencia ${t.clase}`;
-  btn.onclick = () => enviarAsistencia(alumno.id, materiaId, t.texto, t.autoHora);
-  botones.appendChild(btn);
-});
-
-
-                fila.appendChild(nombre);
-                fila.appendChild(botones);
-                contenedor.appendChild(fila);
-            }
-        })
-        .catch(err => console.error('Error al crear lista de alumnos:', err));
-}
-
-// === ENVIAR ASISTENCIA ===
-async function enviarAsistencia(alumnoId, materiaId, tipo, autoHora) {
-    try {
-        const payload = { alumno: alumnoId, materia: materiaId, tipo };
-        if (autoHora) payload.autoHora = autoHora;
-
-        await fetch("http://localhost:3000/api/asistencias", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(payload)
-        });
-
-        alert(`${tipo} registrada`);
-        crearListaConBotones(); // refresca lista
-    } catch (err) {
-        console.error(err);
-        alert("Error registrando asistencia");
-    }
-}
-
-// === TABLA DE ASISTENCIAS ===
-async function cargarAsistencias() {
-  const curso = document.getElementById("cursos").value;
-  const materia = document.getElementById("materias").value;
-  const fecha = document.getElementById("fechaFiltro").value;
-
-  if (!curso || !materia || !fecha) {
-    alert("Elegí curso, materia y fecha");
+// Materias en consulta
+async function cargarMateriasConsulta(cursoId) {
+  const materiaSelect = document.getElementById('consultaMateria');
+  if (!cursoId) {
+    materiaSelect.disabled = true;
     return;
   }
 
-  const res = await fetch(`/api/asistencias?fecha=${fecha}&curso=${curso}&materia=${materia}`);
-  const data = await res.json();
-
-  const tabla = document.getElementById("tablaAsistencias");
-  const cuerpo = tabla.querySelector("tbody");
-  cuerpo.innerHTML = "";
-
-  if (data.asistencias?.length > 0) {
-    tabla.style.display = "table";
-
-    data.asistencias.forEach(a => {
-      cuerpo.innerHTML += `
-        <tr>
-          <td>${a.alumno_id || '-'}</td>
-          <td>${a.nombre || '-'}</td>
-          <td>${a.apellido || '-'}</td>
-          <td>${a.tipo || '-'}</td>
-          <td>${a.fecha_ingreso ?? '-'}</td>
-          <td>${a.fecha_egreso ?? '-'}</td>
-          <td>${a.id || '-'}</td>
-          <td>
-            <button onclick="editarAsistencia(${a.id})">✏️</button>
-            <button onclick="eliminarAsistencia(${a.id})">🗑️</button>
-          </td>
-        </tr>
-      `;
-    });
-  } else {
-    tabla.style.display = "none";
-    alert("No hay asistencias ese día");
+  try {
+    const res = await fetch(`http://localhost:3000/materias/${cursoId}`);
+    const materias = await res.json();
+    materiaSelect.innerHTML = '<option value="">Seleccione</option>';
+    materias.forEach(m => materiaSelect.innerHTML += `<option value="${m.id}">${m.nombre}</option>`);
+    materiaSelect.disabled = false;
+  } catch (error) {
+    console.error('Error al cargar materias:', error);
   }
 }
 
+// Tabla de Asistencias
+function renderAsistencias(asistencias) {
+  const tbody = document.querySelector('#tablaAsistencias tbody');
+  tbody.innerHTML = '';
+  asistencias.forEach(a => {
+    const fila = document.createElement('tr');
+  fila.innerHTML = `
+  <td>${a.id}</td>
+  <td>${a.alumno_id}</td>
+  <td>${a.nombres}</td>
+  <td>${a.apellidos}</td>
+  <td>${a.tipo}</td>
+  <td>${a.hora_ingreso || '-'}</td>
+  <td>${a.hora_egreso || '-'}</td>
+  <td>${a.fecha}</td>
+  <td>
+    <button class="editar" onclick="editarAsistencia(${a.id})">Editar</button>
+    <button class="eliminar" onclick="eliminarAsistencia(${a.id})">Eliminar</button>
+  </td>
+`;
 
-// === ELIMINAR ASISTENCIA ===
-async function eliminarAsistencia(id) {
-    if(!confirm("¿Eliminar asistencia?")) return;
-
-    await fetch(`/api/asistencias/${id}`, { method: "DELETE" });
-    cargarAsistencias();
+    tbody.appendChild(fila);
+  });
 }
 
-// === EDITAR ASISTENCIA ===
+// Boton para editar asistencias
 async function editarAsistencia(id) {
-    const tipo = prompt("Nuevo tipo (P, A, T, RA, PA):");
-    const fecha_ingreso = prompt("Fecha ingreso (YYYY-MM-DD HH:MM) o vacío:");
-    const fecha_egreso = prompt("Fecha egreso (YYYY-MM-DD HH:MM) o vacío:");
+  try {
+    const tipo = prompt('Ingrese nuevo tipo (A, P, T, RA, PA):');
+    if (!tipo) return alert('Edición cancelada.');
 
-    await fetch(`/api/asistencias/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ tipo, fecha_ingreso, fecha_egreso })
+    let hora_ingreso = null;
+    let hora_egreso = null;
+
+    if (tipo === 'T' || tipo === 'PA') {
+      hora_ingreso = prompt('Ingrese hora de ingreso (HH:MM):', obtenerHoraActual());
+    } else if (tipo === 'RA') {
+      hora_egreso = prompt('Ingrese hora de egreso (HH:MM):', obtenerHoraActual());
+    }
+
+    const res = await fetch(`http://localhost:3000/asistencias/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tipo, hora_ingreso, hora_egreso })
     });
 
-    cargarAsistencias();
+    if (res.ok) {
+      alert('Asistencia actualizada correctamente.');
+      consultarAsistencias();
+    } else {
+      alert('Error al actualizar la asistencia.');
+    }
+  } catch (error) {
+    console.error('Error al editar asistencia:', error);
+  }
 }
 
-// === INICIO ===
-document.addEventListener('DOMContentLoaded', () => {
-    cargarCursos();
-});
+// Boton para eliminar asistencias
+async function eliminarAsistencia(id) {
+  try {
+    const confirmar = confirm('¿Seguro que desea eliminar este registro?');
+    if (!confirmar) return;
+
+    const res = await fetch(`http://localhost:3000/asistencias/${id}`, { method: 'DELETE' });
+
+    if (res.ok) {
+      alert('Registro eliminado correctamente.');
+      consultarAsistencias();
+    } else {
+      alert('Error al eliminar el registro.');
+    }
+  } catch (error) {
+    console.error('Error al eliminar asistencia:', error);
+  }
+}
+
+// Para la hora actual
+function obtenerHoraActual() {
+  const ahora = new Date();
+  const horas = String(ahora.getHours()).padStart(2, '0');
+  const minutos = String(ahora.getMinutes()).padStart(2, '0');
+  return `${horas}:${minutos}`;
+}
+
+// Eventos
+document.addEventListener('DOMContentLoaded', cargarCursos);
+document.getElementById('btnCrearAlumno').addEventListener('click', crearAlumno);
+document.getElementById('filtroCurso').addEventListener('change', e => cargarMateriasYAlumnos(e.target.value));
+document.getElementById('consultaCurso').addEventListener('change', e => cargarMateriasConsulta(e.target.value));
+document.getElementById('btnConsultar').addEventListener('click', consultarAsistencias);
