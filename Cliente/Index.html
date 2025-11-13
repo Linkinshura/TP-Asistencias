@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asistencias Alumnos</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>Gestión de Asistencias</h1>
+
+<section id="crear-alumno">
+  <h2>Crear Alumno</h2>
+  <input type="text" id="nombre" placeholder="Nombre">
+  <input type="text" id="apellido" placeholder="Apellido">
+  <select id="selectCurso"></select>
+  <button id="btnCrearAlumno">Crear</button>
+</section>
+
+<section id="registrar-asistencia">
+  <h2>Registrar Asistencia</h2>
+  <select id="filtroCurso"></select>
+  <select id="filtroMateria" disabled></select>
+  <div id="listaAlumnos"></div>
+</section>
+
+<section id="consultar-fecha">
+  <h2>Consultar Asistencias</h2>
+  <input type="date" id="fechaFiltro">
+  <select id="consultaCurso"></select>
+  <select id="consultaMateria" disabled></select>
+  <button id="btnConsultar">Consultar</button>
+
+  <table id="tablaAsistencias">
+    <thead>
+      <tr>
+        <th>ID Registro</th>
+        <th>ID Alumno</th>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Tipo</th>
+        <th>Hora Ingreso</th>
+        <th>Hora Egreso</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+</section>
+
+<script src="main.js"></script>
+</body>
+</html>
