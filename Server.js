@@ -19,7 +19,7 @@ const db = mysql.createConnection({
 const path = require('path');
 
 // archivos estaticos desde public
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'Cliente')));
 
 
 app.get('/', (req, res) => {
