@@ -1,4 +1,4 @@
-async function cargarCursos() {
+ async function cargarCursos() {
   try {
     const res = await fetch('http://localhost:3000/cursos');
     const cursos = await res.json();
